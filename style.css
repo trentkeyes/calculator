@@ -20,16 +20,18 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url('images/nathan-anderson-7bzvXyuT3aQ-unsplash.jpg');
+    background-image: url('images/roland-denes-beprhhF780E-unsplash.jpg');
+    background-size: cover;
+    background-position: bottom;
     padding: 10px;
-    margin: 20px;
+    margin: 15px;
     border-radius: 10px;
 }
 
  h1 {
      margin: 10px;
      padding: 0px 20px;
-     font-size: 45px;
+     font-size: 40px;
      background-color: #02809090;
      border-radius: 10px;
 
@@ -41,20 +43,24 @@
      justify-content: center;
      align-items: center;
      gap: 5px;
-     height: 350px;
-     max-width: 350px;
+     max-height: 420px;
+     max-width: 310px;
  }
 
  .display {
-     background-color: #F0F3BD60;
+    text-align: right;
+     background-color: #F0F3BD80;
      color: #05668D;
      font-weight: bold;
-     font-size: 45px;
+     font-size: 40px;
      padding: 0px 20px;
+     margin-bottom: 10px;
      border-radius: 10px;
+     width: 300px;
+     height: 66px;
  }
 
- .numButton, .operator, .equal, .clear {
+ .numButton, .operator, .equals, .clear {
      font-size: 35px;
      border: none;
      padding: 0px 20px;
@@ -69,6 +75,11 @@
     background-color: #00A89695;
  }
 
- .equal, .clear {
+ #equals, #clear {
      background-color: #05668D95;
  }
+
+ .bottomContain {
+     width: 100%;
+ }
+

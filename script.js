@@ -1,3 +1,9 @@
+const numButtons = document.querySelectorAll('.numButton');
+const operators = document.querySelectorAll('.operator');
+const display = document.querySelector('.display');
+
+let numVar;
+let operatorVar;
 
 
 const add = function (...args) {
@@ -36,3 +42,22 @@ const dict = {
 const operate = function (operate, a, b) {
     return dict[operate](a, b);
 }
+
+numButtons.forEach((element) => {
+    element.addEventListener('click', (e) => {
+        numVar = e.target.textContent;
+        display.textContent = numVar.toString();
+        console.log(numVar);
+    })
+});
+
+operators.forEach((element) => {
+    element.addEventListener('click', (e) => {
+        operatorVar = e.target.textContent;
+        display.textContent = operatorVar;
+        console.log(operatorVar);
+        console.log(display)
+    })
+});
+
+
