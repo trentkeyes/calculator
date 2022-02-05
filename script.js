@@ -1,9 +1,12 @@
 const numButtons = document.querySelectorAll('.numButton');
 const operators = document.querySelectorAll('.operator');
+const clear = document.querySelectorAll('#clear');
+
 const display = document.querySelector('.display');
 
-let numVar;
-let operatorVar;
+
+let numVar = '';
+let operatorVar = '';
 
 
 const add = function (...args) {
@@ -45,18 +48,27 @@ const operate = function (operate, a, b) {
 
 numButtons.forEach((element) => {
     element.addEventListener('click', (e) => {
-        numVar = e.target.textContent;
-        display.textContent = numVar.toString();
-        console.log(numVar);
+        if (numVar.length < 13) {
+            numVar = numVar + e.target.textContent;
+            display.textContent = numVar.toString();
+            console.log(numVar);
+        }
     })
 });
 
 operators.forEach((element) => {
     element.addEventListener('click', (e) => {
-        operatorVar = e.target.textContent;
-        display.textContent = operatorVar;
-        console.log(operatorVar);
-        console.log(display)
+        if (e.target.textContent == 'C') {
+            numVar = '';
+            operatorVar = '';
+            display.textContent = '';
+        } else {
+            operatorVar = e.target.textContent;
+            display.textContent = operatorVar;
+            console.log(operatorVar);
+            console.log(display)
+        }
+
     })
 });
 
