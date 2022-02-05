@@ -1,12 +1,17 @@
 const numButtons = document.querySelectorAll('.numButton');
 const operators = document.querySelectorAll('.operator');
-const clear = document.querySelectorAll('#clear');
-
+const clear = document.querySelector('#clear');
+const division = document.querySelector('#division');
+const multiplication = document.querySelector('#multiplication');
+const subtraction = document.querySelector('#subtraction');
+const addition = document.querySelector('#plus');
+const equals = document.querySelector('#equals');
 const display = document.querySelector('.display');
 
 
-let numVar = '';
+let firstNum = '';
 let operatorVar = '';
+let result = '';
 
 
 const add = function (...args) {
@@ -48,28 +53,28 @@ const operate = function (operate, a, b) {
 
 numButtons.forEach((element) => {
     element.addEventListener('click', (e) => {
-        if (numVar.length < 13) {
+
+        if (display.textContent.length < 13 && firstNum !== '' && operatorVar !== '') {
+            display.textContent = operate(operatorVar, numVar, e.target.textContent.toString());
+        } else if (numVar.length < 13) {
             numVar = numVar + e.target.textContent;
             display.textContent = numVar.toString();
-            console.log(numVar);
         }
     })
 });
 
-operators.forEach((element) => {
-    element.addEventListener('click', (e) => {
-        if (e.target.textContent == 'C') {
-            numVar = '';
-            operatorVar = '';
-            display.textContent = '';
-        } else {
-            operatorVar = e.target.textContent;
-            display.textContent = operatorVar;
-            console.log(operatorVar);
-            console.log(display)
-        }
+clear.addEventListener('click', (e) => {
+    numVar = '';
+    operatorVar = '';
+    display.textContent = '';
+})
 
-    })
+division.addEventListener('click', (e) => {
+    operatorVar = '/';
+    display.textContent = `${numVar.toString()} ÷`;
+    console.log(operatorVar);
 });
+
+
 
 
