@@ -10,32 +10,23 @@ const display = document.querySelector('.display');
 
 
 let firstNum = '';
+let firstNumOp = false;
+let secondNum = '';
+let secondNumOp = false;
 let operatorVar = '';
+let operatorOp = false;
+let operatorView = '';
 let result = '';
 
-
-const add = function (...args) {
-    console.log(args);
-    if (args.length > 0) {
-        return args.reduce((accumulator, currentValue) => accumulator + currentValue);
-    }
-    return 0;
+const add = function (a, b) {
+    return a + b;
 };
-
-const subtract = function (...args) {
-    if (args.length > 0) {
-        return args.reduce((accumulator, currentValue) => accumulator - currentValue);
-    }
-    return 0;
+const subtract = function (a, b) {
+    return a - b;
 };
-
-const multiply = function (...args) {
-    if (args.length > 0) {
-        return args.reduce((accumulator, currentValue) => accumulator * currentValue);
-    }
-    return 0;
+const multiply = function (a, b) {
+    return a * b;
 };
-
 const divide = function (a, b) {
     return a / b;
 };
@@ -47,34 +38,95 @@ const dict = {
     '/': divide,
 }
 
-const operate = function (operate, a, b) {
-    return dict[operate](a, b);
+const operate = function (operator, num1, num2) {
+    return dict[operatorVar](num1, num2);
 }
 
 numButtons.forEach((element) => {
     element.addEventListener('click', (e) => {
-
-        if (display.textContent.length < 13 && firstNum !== '' && operatorVar !== '') {
-            display.textContent = operate(operatorVar, numVar, e.target.textContent.toString());
-        } else if (numVar.length < 13) {
-            numVar = numVar + e.target.textContent;
-            display.textContent = numVar.toString();
+        let input = e.target.textContent.toString();
+        console.log(input);
+        if (display.textContent.length < 13) {
+            if (firstNumOp == false && secondNumOp == false) {
+                firstNum = input;
+                firstNumOp = true;
+                display.textContent = firstNum;
+                console.log(firstNum);
+            } else if (firstNumOp == true && secondNumOp == false) {
+                firstNum = firstNum + input;
+                display.textContent = firstNum;
+            } else if (firstNumOp == false && secondNumOp == true && secondNum == '') {
+                secondNum = input;
+                display.textContent = `${firstNum}${operatorView}${secondNum}`;
+            } else if (firstNumOp == false && secondNumOp == true) {
+                secondNum = secondNum + input;
+                display.textContent = `${firstNum}${operatorView}${secondNum}`;
+            }
         }
     })
 });
 
+equals.addEventListener('click', (e) => {
+    if (operatorVar == '+') {
+        firstNum = Number(firstNum);
+        secondNum = Number(secondNum);
+    }
+    display.textContent = operate(operatorVar, firstNum, secondNum);
+    secondNum = '';
+    secondNumOp = false;
+    operatorVar = '';
+    operatorView = '';
+    operatorOp = false;
+    firstNum = display.textContent;
+});
+
 clear.addEventListener('click', (e) => {
-    numVar = '';
+    firstNum = '';
+    secondNum = '';
     operatorVar = '';
     display.textContent = '';
-})
+    firstNumOp = false;
+    secondNumOp = false;
+    operatorOp = false;
+});
 
 division.addEventListener('click', (e) => {
     operatorVar = '/';
-    display.textContent = `${numVar.toString()} ÷`;
-    console.log(operatorVar);
+    operatorView = '÷';
+    display.textContent = `${firstNum}÷`;
+    operatorOp = true;
+    firstNumOp = false;
+    secondNumOp = true;
 });
 
+multiplication.addEventListener('click', (e) => {
+    operatorVar = '*';
+    operatorView = '×'
+    display.textContent = `${firstNum}×`;
+    operatorOp = true;
+    firstNumOp = false;
+    secondNumOp = true;
+});
+
+addition.addEventListener('click', (e) => {
+    firstNum = Number(firstNum);
+    secondNum = Number(secondNum);
+    operatorVar = '+';
+    operatorView = '+';
+    display.textContent = `${firstNum}+`;
+    operatorOp = true;
+    firstNumOp = false;
+    secondNumOp = true;
+});
+
+subtraction.addEventListener('click', (e) => {
+    operatorVar = '-';
+    operatorView = '-';
+    display.textContent = `${firstNum}−`;
+    operatorOp = true;
+    firstNumOp = false;
+    secondNumOp = true;
+});
 
 
 
