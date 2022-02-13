@@ -39,26 +39,33 @@ const dict = {
 }
 
 const operate = function (operator, num1, num2) {
-    return dict[operatorVar](num1, num2);
+    let result = dict[operatorVar](num1, num2).toString();
+    if (result.length > 13) {
+        result = Number(result);
+        let whole = Math.round(result).toString();
+        return result.toFixed(13 - whole.length)
+    } else {
+        return result;
+    }
+
+
 }
 
 numButtons.forEach((element) => {
     element.addEventListener('click', (e) => {
         let input = e.target.textContent.toString();
-        console.log(input);
         if (display.textContent.length < 13) {
             if (firstNumOp == false && secondNumOp == false) {
                 firstNum = input;
                 firstNumOp = true;
                 display.textContent = firstNum;
-                console.log(firstNum);
-            } else if (firstNumOp == true && secondNumOp == false) {
+            } else if (firstNumOp && secondNumOp == false && firstNum !== '0') {
                 firstNum = firstNum + input;
                 display.textContent = firstNum;
-            } else if (firstNumOp == false && secondNumOp == true && secondNum == '') {
+            } else if (firstNumOp == false && secondNumOp && secondNum == '') {
                 secondNum = input;
                 display.textContent = `${firstNum}${operatorView}${secondNum}`;
-            } else if (firstNumOp == false && secondNumOp == true) {
+            } else if (firstNumOp == false && secondNumOp && secondNum !== '0') {
                 secondNum = secondNum + input;
                 display.textContent = `${firstNum}${operatorView}${secondNum}`;
             }
@@ -66,11 +73,17 @@ numButtons.forEach((element) => {
     })
 });
 
+const doOperation = function (operator, num1, num2) {
+    firstNum = Number(num1);
+    secondNum = Number(num2);
+    display.textContent = operate(operator, firstNum, secondNum);
+    secondNum = '';
+    firstNum = display.textContent;
+}
+
 equals.addEventListener('click', (e) => {
-    if (operatorVar == '+') {
-        firstNum = Number(firstNum);
-        secondNum = Number(secondNum);
-    }
+    firstNum = Number(firstNum);
+    secondNum = Number(secondNum);
     display.textContent = operate(operatorVar, firstNum, secondNum);
     secondNum = '';
     secondNumOp = false;
@@ -78,6 +91,7 @@ equals.addEventListener('click', (e) => {
     operatorView = '';
     operatorOp = false;
     firstNum = display.textContent;
+    firstNumOp = true;
 });
 
 clear.addEventListener('click', (e) => {
@@ -91,42 +105,49 @@ clear.addEventListener('click', (e) => {
 });
 
 division.addEventListener('click', (e) => {
+    if (operatorOp) {
+        doOperation(operatorVar, firstNum, secondNum);
+    }
     operatorVar = '/';
     operatorView = '÷';
-    display.textContent = `${firstNum}÷`;
     operatorOp = true;
     firstNumOp = false;
     secondNumOp = true;
+    display.textContent = `${firstNum}÷`;
 });
 
 multiplication.addEventListener('click', (e) => {
+    if (operatorOp) {
+        doOperation(operatorVar, firstNum, secondNum);
+    }
     operatorVar = '*';
     operatorView = '×'
-    display.textContent = `${firstNum}×`;
     operatorOp = true;
     firstNumOp = false;
     secondNumOp = true;
+    display.textContent = `${firstNum}×`;
 });
 
 addition.addEventListener('click', (e) => {
-    firstNum = Number(firstNum);
-    secondNum = Number(secondNum);
+    if (operatorOp) {
+        doOperation(operatorVar, firstNum, secondNum);
+    }
     operatorVar = '+';
     operatorView = '+';
-    display.textContent = `${firstNum}+`;
     operatorOp = true;
     firstNumOp = false;
     secondNumOp = true;
+    display.textContent = `${firstNum}+`;
 });
 
 subtraction.addEventListener('click', (e) => {
+    if (operatorOp) {
+        doOperation(operatorVar, firstNum, secondNum);
+    }
     operatorVar = '-';
     operatorView = '-';
-    display.textContent = `${firstNum}−`;
     operatorOp = true;
     firstNumOp = false;
     secondNumOp = true;
+    display.textContent = `${firstNum}−`;
 });
-
-
-
