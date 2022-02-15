@@ -7,6 +7,8 @@ const subtraction = document.querySelector('#subtraction');
 const addition = document.querySelector('#plus');
 const equals = document.querySelector('#equals');
 const display = document.querySelector('.display');
+const decimal = document.querySelector('#decimal');
+const backspace = document.querySelector('#backspace');
 
 
 let firstNum = '';
@@ -17,6 +19,7 @@ let operatorVar = '';
 let operatorOp = false;
 let operatorView = '';
 let result = '';
+let didOperation = false;
 
 const add = function (a, b) {
     return a + b;
@@ -39,35 +42,47 @@ const dict = {
 }
 
 const operate = function (operator, num1, num2) {
-    let result = dict[operatorVar](num1, num2).toString();
-    if (result.length > 13) {
-        result = Number(result);
-        let whole = Math.round(result).toString();
-        return result.toFixed(13 - whole.length)
+    if (operator == '/' && num2.toString() == '0') {
+        return 'Nope!';
     } else {
-        return result;
+        let result = dict[operatorVar](num1, num2).toString();
+        if (result.length > 12) {
+            result = Number(result);
+            let whole = Math.round(result).toString();
+            return result.toFixed(12 - whole.length)
+        } else {
+            return result;
+        }
     }
-
-
 }
 
 numButtons.forEach((element) => {
     element.addEventListener('click', (e) => {
         let input = e.target.textContent.toString();
-        if (display.textContent.length < 13) {
+        if (didOperation && !operatorOp) {
+            clearFunc();
+        }
+        if (display.textContent.length < 12) {
             if (firstNumOp == false && secondNumOp == false) {
                 firstNum = input;
                 firstNumOp = true;
                 display.textContent = firstNum;
             } else if (firstNumOp && secondNumOp == false && firstNum !== '0') {
-                firstNum = firstNum + input;
-                display.textContent = firstNum;
+                if (input == '.' && firstNum.includes('.')) {
+                } else {
+                    firstNum = firstNum + input;
+                    display.textContent = firstNum;
+                }
             } else if (firstNumOp == false && secondNumOp && secondNum == '') {
                 secondNum = input;
                 display.textContent = `${firstNum}${operatorView}${secondNum}`;
             } else if (firstNumOp == false && secondNumOp && secondNum !== '0') {
-                secondNum = secondNum + input;
-                display.textContent = `${firstNum}${operatorView}${secondNum}`;
+                if (input == '.' && secondNum.includes('.')) {
+                } else {
+                    secondNum = secondNum + input;
+                    display.textContent = `${firstNum}${operatorView}${secondNum}`;
+                }
+
             }
         }
     })
@@ -79,6 +94,18 @@ const doOperation = function (operator, num1, num2) {
     display.textContent = operate(operator, firstNum, secondNum);
     secondNum = '';
     firstNum = display.textContent;
+    didOperation = true;
+}
+
+const clearFunc = function () {
+    firstNum = '';
+    secondNum = '';
+    operatorVar = '';
+    display.textContent = '';
+    firstNumOp = false;
+    secondNumOp = false;
+    operatorOp = false;
+    didOperation = false;
 }
 
 equals.addEventListener('click', (e) => {
@@ -92,16 +119,11 @@ equals.addEventListener('click', (e) => {
     operatorOp = false;
     firstNum = display.textContent;
     firstNumOp = true;
+    didOperation = true;
 });
 
 clear.addEventListener('click', (e) => {
-    firstNum = '';
-    secondNum = '';
-    operatorVar = '';
-    display.textContent = '';
-    firstNumOp = false;
-    secondNumOp = false;
-    operatorOp = false;
+    clearFunc();
 });
 
 division.addEventListener('click', (e) => {
@@ -151,3 +173,19 @@ subtraction.addEventListener('click', (e) => {
     secondNumOp = true;
     display.textContent = `${firstNum}−`;
 });
+
+backspace.addEventListener('click', (e) => {
+    display.textContent = display.textContent.slice(0, -1);
+    if (firstNumOp && secondNumOp == false) {
+        firstNum = firstNum.slice(0, -1);
+        display.textContent = firstNum;
+    } else if (firstNumOp == false && operatorOp && secondNum == '') {
+        operatorVar = '';
+        operatorView = '';
+        operatorOp = false;
+        display.textContent = firstNum;
+    } else if (firstNumOp == false && secondNumOp) {
+        secondNum = secondNum.slice(0, -1);
+        display.textContent = `${firstNum}${operatorView}${secondNum}`;
+    }
+})

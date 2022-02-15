@@ -48,7 +48,7 @@
  }
 
  .display {
-    text-align: right;
+     text-align: right;
      background-color: #F0F3BD80;
      color: #05668D;
      font-weight: bold;
@@ -60,7 +60,7 @@
      height: 66px;
  }
 
- .numButton, .operator, .equals, .clear {
+ .numButton, .operator, .equals, .clear, #backspace {
      font-size: 35px;
      border: none;
      padding: 0px 20px;
@@ -75,8 +75,12 @@
     background-color: #00A89695;
  }
 
- #equals, #clear {
+ #equals, #clear, #backspace {
      background-color: #05668D95;
+ }
+
+ #backspace {
+    margin-left: 2.1em;
  }
 
  .bottomContain {
