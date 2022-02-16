@@ -10,7 +10,6 @@ const display = document.querySelector('.display');
 const decimal = document.querySelector('#decimal');
 const backspace = document.querySelector('#backspace');
 
-
 let firstNum = '';
 let firstNumOp = false;
 let secondNum = '';
@@ -54,11 +53,11 @@ const operate = function (operator, num1, num2) {
             return result;
         }
     }
-}
+};
 
-numButtons.forEach((element) => {
-    element.addEventListener('click', (e) => {
-        let input = e.target.textContent.toString();
+const numButtonsEvent = function (input) {
+    if (input.match(/[0-9]|\./)) {
+        console.log(input);
         if (didOperation && !operatorOp) {
             clearFunc();
         }
@@ -82,10 +81,20 @@ numButtons.forEach((element) => {
                     secondNum = secondNum + input;
                     display.textContent = `${firstNum}${operatorView}${secondNum}`;
                 }
-
             }
         }
-    })
+    }
+};
+
+numButtons.forEach((element) => {
+    element.addEventListener('click', (e) => {
+        let input = e.target.textContent.toString();
+        numButtonsEvent(input);
+    });
+});
+window.addEventListener('keydown', (e) => {
+    let input = e.key.toString();
+    numButtonsEvent(input);
 });
 
 const doOperation = function (operator, num1, num2) {
@@ -95,7 +104,132 @@ const doOperation = function (operator, num1, num2) {
     secondNum = '';
     firstNum = display.textContent;
     didOperation = true;
-}
+};
+
+const clearEvent = function (e) {
+    if (e.key == 'c' || e.type == 'click') {
+        firstNum = '';
+        secondNum = '';
+        operatorVar = '';
+        display.textContent = '';
+        firstNumOp = false;
+        secondNumOp = false;
+        operatorOp = false;
+        didOperation = false;
+    }
+};
+
+clear.addEventListener('click', clearEvent);
+window.addEventListener('keydown', clearEvent);
+
+const equalsEvent = function (e) {
+    if (e.key == 'Enter' || e.type == 'click') {
+        firstNum = Number(firstNum);
+        secondNum = Number(secondNum);
+        display.textContent = operate(operatorVar, firstNum, secondNum);
+        secondNum = '';
+        secondNumOp = false;
+        operatorVar = '';
+        operatorView = '';
+        operatorOp = false;
+        firstNum = display.textContent;
+        firstNumOp = true;
+        didOperation = true;
+    }
+};
+
+equals.addEventListener('click', equalsEvent);
+window.addEventListener('keydown', equalsEvent);
+
+const divideEvent = function (e) {
+    if (e.key == '/' || e.type == 'click') {
+        if (operatorOp) {
+            doOperation(operatorVar, firstNum, secondNum);
+        }
+        operatorVar = '/';
+        operatorView = '÷';
+        operatorOp = true;
+        firstNumOp = false;
+        secondNumOp = true;
+        display.textContent = `${firstNum}÷`;
+    }
+};
+
+division.addEventListener('click', divideEvent);
+window.addEventListener('keydown', divideEvent);
+
+const multiplyEvent = function (e) {
+    if (e.key == '*' || e.type == 'click') {
+        if (operatorOp) {
+            doOperation(operatorVar, firstNum, secondNum);
+        }
+        operatorVar = '*';
+        operatorView = '×'
+        operatorOp = true;
+        firstNumOp = false;
+        secondNumOp = true;
+        display.textContent = `${firstNum}×`;
+    }
+};
+
+multiplication.addEventListener('click', multiplyEvent);
+window.addEventListener('keydown', multiplyEvent);
+
+const addEvent = function (e) {
+    if (e.key == '+' || e.type == 'click') {
+        if (operatorOp) {
+            doOperation(operatorVar, firstNum, secondNum);
+        }
+        operatorVar = '+';
+        operatorView = '+';
+        operatorOp = true;
+        firstNumOp = false;
+        secondNumOp = true;
+        display.textContent = `${firstNum}+`;
+    }
+};
+
+addition.addEventListener('click', addEvent);
+window.addEventListener('keydown', addEvent);
+
+const subtractEvent = function (e) {
+    if (e.key == '-' || e.type == 'click') {
+        if (operatorOp) {
+            doOperation(operatorVar, firstNum, secondNum);
+        }
+        operatorVar = '-';
+        operatorView = '-';
+        operatorOp = true;
+        firstNumOp = false;
+        secondNumOp = true;
+        display.textContent = `${firstNum}−`;
+    }
+};
+
+subtraction.addEventListener('click', subtractEvent);
+window.addEventListener('keydown', subtractEvent);
+
+const backspaceEvent = function (e) {
+    if (e.key == 'Backspace' || e.type == 'click') {
+        if (firstNumOp && secondNumOp == false) {
+            firstNum = firstNum.slice(0, -1);
+            display.textContent = firstNum;
+        } else if (firstNumOp == false && operatorOp && secondNum == '') {
+            operatorVar = '';
+            operatorView = '';
+            operatorOp = false;
+            display.textContent = firstNum;
+            firstNumOp = true;
+            secondNumOp = false;
+        } else if (firstNumOp == false && secondNumOp) {
+            secondNum = secondNum.slice(0, -1);
+            display.textContent = `${firstNum}${operatorView}${secondNum}`;
+        }
+    }
+};
+
+backspace.addEventListener('click', backspaceEvent);
+window.addEventListener('keydown', backspaceEvent);
 
 const clearFunc = function () {
     firstNum = '';
@@ -106,86 +240,4 @@ const clearFunc = function () {
     secondNumOp = false;
     operatorOp = false;
     didOperation = false;
-}
-
-equals.addEventListener('click', (e) => {
-    firstNum = Number(firstNum);
-    secondNum = Number(secondNum);
-    display.textContent = operate(operatorVar, firstNum, secondNum);
-    secondNum = '';
-    secondNumOp = false;
-    operatorVar = '';
-    operatorView = '';
-    operatorOp = false;
-    firstNum = display.textContent;
-    firstNumOp = true;
-    didOperation = true;
-});
-
-clear.addEventListener('click', (e) => {
-    clearFunc();
-});
-
-division.addEventListener('click', (e) => {
-    if (operatorOp) {
-        doOperation(operatorVar, firstNum, secondNum);
-    }
-    operatorVar = '/';
-    operatorView = '÷';
-    operatorOp = true;
-    firstNumOp = false;
-    secondNumOp = true;
-    display.textContent = `${firstNum}÷`;
-});
-
-multiplication.addEventListener('click', (e) => {
-    if (operatorOp) {
-        doOperation(operatorVar, firstNum, secondNum);
-    }
-    operatorVar = '*';
-    operatorView = '×'
-    operatorOp = true;
-    firstNumOp = false;
-    secondNumOp = true;
-    display.textContent = `${firstNum}×`;
-});
-
-addition.addEventListener('click', (e) => {
-    if (operatorOp) {
-        doOperation(operatorVar, firstNum, secondNum);
-    }
-    operatorVar = '+';
-    operatorView = '+';
-    operatorOp = true;
-    firstNumOp = false;
-    secondNumOp = true;
-    display.textContent = `${firstNum}+`;
-});
-
-subtraction.addEventListener('click', (e) => {
-    if (operatorOp) {
-        doOperation(operatorVar, firstNum, secondNum);
-    }
-    operatorVar = '-';
-    operatorView = '-';
-    operatorOp = true;
-    firstNumOp = false;
-    secondNumOp = true;
-    display.textContent = `${firstNum}−`;
-});
-
-backspace.addEventListener('click', (e) => {
-    display.textContent = display.textContent.slice(0, -1);
-    if (firstNumOp && secondNumOp == false) {
-        firstNum = firstNum.slice(0, -1);
-        display.textContent = firstNum;
-    } else if (firstNumOp == false && operatorOp && secondNum == '') {
-        operatorVar = '';
-        operatorView = '';
-        operatorOp = false;
-        display.textContent = firstNum;
-    } else if (firstNumOp == false && secondNumOp) {
-        secondNum = secondNum.slice(0, -1);
-        display.textContent = `${firstNum}${operatorView}${secondNum}`;
-    }
-})
+};
